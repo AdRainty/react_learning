@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=
     , initial-scale=1.0">
-    <title>使用JSX创建虚拟DOM</title>
+    <title>虚拟DOM与真实DOM</title>
 </head>
 <body>
     <!-- 准备容器 -->
@@ -32,6 +32,9 @@
         // 2.渲染虚拟DOM到页面
         // ReactDOM.render(虚拟Dom, 容器)
         ReactDOM.render(VDOM, document.getElementById('test'))
+        console.log("虚拟DOM: ", VDOM)
+        let TDOM = document.getElementById('test');
+        console.log("真实DOM: ", TDOM);
     </script>
 </body>
 </html>

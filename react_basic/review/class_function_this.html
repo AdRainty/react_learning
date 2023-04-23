@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>类中方法this的指向</title>
+</head>
+<body>
+    <script>
+        // 创建一个Person类
+        class Person {
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+
+            speak() {
+                console.log(this)
+            }
+        }
+
+        let p1 = new Person('tom', 18)
+        // 通过实例调用speak方法
+        p1.speak()  // {"name": "tom","age": 18}
+
+        // 类中方法开启了局部严格模式
+        let fun = p1.speak
+        fun()       // undefined
+    </script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=
     , initial-scale=1.0">
-    <title>使用JSX创建虚拟DOM</title>
+    <title>JSX练习</title>
 </head>
 <body>
     <!-- 准备容器 -->
@@ -23,11 +23,20 @@
 
     <!-- 此处一定要写babel -->
     <script type="text/babel">
+        let data = ["Angular", "React", "Vue"]
+        let data1 = [<li>Angular</li>, <li>React</li>, <li>Vue</li>]
         // 1.创建虚拟DOM
         let VDOM = (    // 此处一定不要写引号, 因为不是字符串
-            <h1 title="id">
-                <span>Hello, React</span>
-            </h1> 
+            <div>
+                <h1>前端js框架列表</h1>
+                <ul>
+                    {
+                        data.map((item, index) => {
+                            return <li key={index}>{item}</li>
+                        })
+                    }
+                </ul>
+            </div>
         )       
         // 2.渲染虚拟DOM到页面
         // ReactDOM.render(虚拟Dom, 容器)

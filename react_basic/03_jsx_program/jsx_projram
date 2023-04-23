@@ -5,7 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=
     , initial-scale=1.0">
-    <title>使用JSX创建虚拟DOM</title>
+    <title>JSX语法规则</title>
+    <style>
+        .title{
+            background-color: orange;
+            width: 200px;
+        }
+    </style>
 </head>
 <body>
     <!-- 准备容器 -->
@@ -23,11 +29,19 @@
 
     <!-- 此处一定要写babel -->
     <script type="text/babel">
+        let myId = 'id'
+        let myData = 'Hello, React'
         // 1.创建虚拟DOM
-        let VDOM = (    // 此处一定不要写引号, 因为不是字符串
-            <h1 title="id">
-                <span>Hello, React</span>
-            </h1> 
+         // 样式的类名指定使用className
+        // 内联样式需要使用`style={{key:value}}的形式`
+        // 此处一定不要写引号, 因为不是字符串
+        let VDOM = (   
+            <div>
+                <h2 className="title" id={myId.toLowerCase()}>
+                    <span style={{color: 'white'}}>{myData.toLocaleLowerCase()}</span>
+                </h2> 
+                <input type="text"/>
+            </div> 
         )       
         // 2.渲染虚拟DOM到页面
         // ReactDOM.render(虚拟Dom, 容器)

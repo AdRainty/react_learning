@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=
     , initial-scale=1.0">
-    <title>使用JSX创建虚拟DOM</title>
+    <title>State简写方式</title>
+    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <!-- 准备容器 -->
@@ -23,15 +24,21 @@
 
     <!-- 此处一定要写babel -->
     <script type="text/babel">
-        // 1.创建虚拟DOM
-        let VDOM = (    // 此处一定不要写引号, 因为不是字符串
-            <h1 title="id">
-                <span>Hello, React</span>
-            </h1> 
-        )       
-        // 2.渲染虚拟DOM到页面
-        // ReactDOM.render(虚拟Dom, 容器)
-        ReactDOM.render(VDOM, document.getElementById('test'))
+        class Weather extends React.Component {
+
+            state = {isHot: false}
+
+            changeWeather = () => {
+                this.setState({isHot: !this.state.isHot })
+            }
+
+            render() {
+                let msg = this.state.isHot? "炎热": "凉爽"
+                return <h1 onClick={this.changeWeather}>今天天气很{msg}</h1>   
+            }
+        }
+
+        ReactDOM.render(<Weather/>, document.getElementById('test'))
     </script>
 </body>
 </html>
