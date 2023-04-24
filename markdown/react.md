@@ -431,3 +431,73 @@ state是组件对象最重要的属性, 值是对象(可以包含多个key-value
 </script>
 ~~~
 
+### 3.3.2 Props
+
+~~~react
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Props</title>
+    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div id="test">
+
+    </div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types, 用于对组件标签进行限制 -->
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+
+    <script type="text/babel">
+        class Person extends React.Component {
+
+            // 限制组件
+            static propTypes = {
+                name: PropTypes.string.isRequired,
+                sex: PropTypes.string,
+                age: PropTypes.number,
+                speak: PropTypes.func
+            }
+
+            // 默认值
+            static defaultProps = {
+                sex: '不男不女'
+            }
+
+            state = {
+                
+            }
+
+            render() {
+                console.log(this)
+                let {name, age, sex} = this.props
+                return (
+                    <ul>
+                        <li>姓名: {name}</li>
+                        <li>性别: {sex}</li>
+                        <li>年龄: {age + 1}</li>
+                    </ul>
+                ) 
+            }
+        }
+
+        let p = {name: '老刘', age: 18, sex: '男'}
+        ReactDOM.render(<Person {...p}/>, document.getElementById('test'))
+    </script>
+</body>
+</html>
+~~~
+
+这里可以使用`{...p}`传递props
+
+注意
+
+1. `{...p}`并非是展开运算符的复制对象，而是react自带的语法，可以遍历属性，但这种方式只能在props里使用，其他地方无法使用该语法遍历对象属性
+2. props为只读的
+
