@@ -501,3 +501,266 @@ state是组件对象最重要的属性, 值是对象(可以包含多个key-value
 1. `{...p}`并非是展开运算符的复制对象，而是react自带的语法，可以遍历属性，但这种方式只能在props里使用，其他地方无法使用该语法遍历对象属性
 2. props为只读的
 
+可以发现，类式组件（拥有实例）拥有props，那函数式组件是否可以拥有props呢？答案是可以的
+
+> 函数式组件在三大组件中仅能使用props
+
+~~~react
+function Person (props) {
+    console.log(props)
+    let {name, age, sex} = props
+    return (
+        <ul>
+            <li>姓名: {name}</li>
+            <li>性别: {sex}</li>
+            <li>年龄: {age + 1}</li>
+        </ul>
+    ) 
+}
+
+let p = {name: '老刘', age: 18, sex: '男'}
+ReactDOM.render(<Person {...p}/>, document.getElementById('test'))
+~~~
+
+### 3.3.3 Refs
+
+组件内的标签可以定义ref属性来标识自己
+
+#### 3.3.3.1 字符串类型Refs
+
+这种方式官方已经不推荐使用
+
+~~~react
+<script type="text/babel">
+    class Demo extends React.Component {
+
+        showData1 = () => {
+            let {input1} = this.refs
+            alert(input1.value)
+        }
+
+        showData2 = () => {
+            let {input2} = this.refs
+            alert(input2.value)
+        }
+
+        render() {
+            return (
+                <div>
+                    <input ref="input1" type="text" placeholder="点击按钮提示数据"/>
+                    <button onClick={this.showData1} >点我提示左侧数据</button>
+                    <input ref="input2" type="text" onBlur={this.showData2} placeholder="失去焦点提示数据"/>    
+                </div>
+            )   
+        }
+    }
+
+    ReactDOM.render(<Demo/>, document.getElementById("test"))
+</script>
+~~~
+
+#### 3.3.3.2 回调函数形式Refs
+
+~~~react
+<script type="text/babel">
+    class Demo extends React.Component {
+
+        showData1 = () => {
+            alert(this.input1.value)
+        }
+
+        showData2 = () => {
+            alert(this.input2.value)
+        }
+
+        render() {
+            return (
+                <div>
+                    <input ref={(curNode) => {this.input1 = curNode}} type="text" placeholder="点击按钮提示数据"/>
+                    <button onClick={this.showData1} >点我提示左侧数据</button>
+                    <input ref={(curNode) => {this.input2 = curNode}} type="text" onBlur={this.showData2} placeholder="失去焦点提示数据"/>
+                </div>
+            )   
+        }
+    }
+
+    ReactDOM.render(<Demo/>, document.getElementById("test"))
+</script>
+~~~
+
+注意：如下代码
+
+~~~react
+<script type="text/babel">
+    class Demo extends React.Component {
+
+        state = {
+            isHot: false
+        }
+
+        showData1 = () => {
+            alert(this.input1.value)
+        }
+
+        changeWeather = () => {
+            let {isHot} = this.state
+            this.setState({isHot: !isHot})
+        }
+
+        render() {
+            let {isHot} = this.state
+            return (
+                <div>
+                    <h2>今天天气很{isHot ? '炎热': '凉爽'}</h2>
+                    <input ref={(curNode) => {this.input1 = curNode; console.log(curNode)}} type="text" placeholder="点击按钮提示数据"/>
+                    <button onClick={this.showData1} >点我提示左侧数据</button>
+                    <button onClick={this.changeWeather} >点我切换天气</button>
+                </div>
+            )   
+        }
+    }
+
+    ReactDOM.render(<Demo/>, document.getElementById("test"))
+</script>
+~~~
+
+如果回调Ref函数是以内联函数 的方式定义的，在更新过程中它会被执行两次，第一次传入参数null，第二次传入参数DOM元素。这是因为每次渲染时会创建一个新的函数实例，所以react会清空旧的并设置新的。
+
+![image-20230424232743678](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230424232743678.png)
+
+#### 3.3.3.3 createRef
+
+可以使用React.createRef()，调用后可以返回一个容器，该容器可以存储被Ref标识的结点，该容器是专人专用
+
+~~~java
+<script type="text/babel">
+    class Demo extends React.Component {
+
+        myRef = React.createRef()
+
+            showData1 = () => {
+            alert(this.myRef.current.value)
+        }
+
+        render() {
+            return (
+                <div>
+                <input ref={this.myRef} type="text" placeholder="点击按钮提示数据"/>
+                <button onClick={this.showData1} >点我提示左侧数据</button>
+                </div>
+            )   
+        }
+    }
+
+ReactDOM.render(<Demo/>, document.getElementById("test"))
+    </script>
+~~~
+
+#### 3.3.3.4 事件处理
+
+1. 通过onXxx属性指定事件处理函数(注意大小写)
+2. React使用的是自定义(合成)事件, 而不是使用的原生DOM事件
+3. React中的事件是通过事件委托方式处理的(委托给组件最外层的元素)
+4. 通过event.target得到发生事件的DOM元素对象
+
+~~~react
+<script type="text/babel">
+    class Demo extends React.Component {
+
+        myRef = React.createRef()
+
+        showData1 = () => {
+            alert(this.myRef.current.value)
+        }
+
+        showData2 = (event) => {
+            alert(event.target.value)
+        }
+
+        render() {
+            return (
+                <div>
+                    <input ref={this.myRef} type="text" placeholder="点击按钮提示数据"/>
+                    <button onClick={this.showData1} >点我提示左侧数据</button>
+                    <input onBlur={this.showData2} type="text" placeholder="失去焦点提示数据"/>
+                </div>
+            )   
+        }
+    }
+
+    ReactDOM.render(<Demo/>, document.getElementById("test"))
+</script>
+~~~
+
+## 3.4 收集表单数据
+
+### 3.4.1 非受控组件
+
+即用即取
+
+~~~react
+<script type="text/babel">
+    class Login extends React.Component {
+        handleSubmit = (event) => {
+            event.preventDefault()
+            const {username , password} = this
+            alert(`你输入的用户名是： ${username.value}, 密码是：${password.value}`)
+        }
+
+        render() {
+            return (
+                <form action="" onSubmit={this.handleSubmit}>
+                    用户名: <input ref={c => this.username = c} type="text" name="username"/>    
+                    密码: <input ref={c => this.password = c} type="password" password="password"/>  
+                    <button>登录</button>  
+                </form>
+            )
+        }
+    }
+
+    ReactDOM.render(<Login/>, document.getElementById("test"))
+</script>
+~~~
+
+### 3.4.2 受控组件
+
+随着输入修改状态，叫非受控组件
+
+~~~react
+<script type="text/babel">
+    class Login extends React.Component {
+
+        state = {
+            username: '',
+            password: ''
+        }
+
+        handleSubmit = (event) => {
+            event.preventDefault()
+            const {username , password} = this.state
+            alert(`你输入的用户名是： ${username}, 密码是：${password}`)
+        }
+
+        saveUsername = (event) => {
+            this.setState({username: event.target.value})
+        }
+
+        savePassword = (event) => {
+            this.setState({username: event.target.value})
+        }
+
+        render() {
+            return (
+                <form action="" onSubmit={this.handleSubmit}>
+                    用户名: <input onChange={this.saveUsername} type="text" name="username"/>    
+                    密码: <input onChange={this.savePassword} type="password" password="password"/>  
+                    <button>登录</button>  
+                </form>
+            )
+        }
+    }
+
+    ReactDOM.render(<Login/>, document.getElementById("test"))
+</script>
+~~~
+

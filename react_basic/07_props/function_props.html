@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Props</title>
+    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div id="test">
+
+    </div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types, 用于对组件标签进行限制 -->
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+
+    <script type="text/babel">
+        
+        function Person (props) {
+            console.log(props)
+            let {name, age, sex} = props
+            return (
+                <ul>
+                    <li>姓名: {name}</li>
+                    <li>性别: {sex}</li>
+                    <li>年龄: {age + 1}</li>
+                </ul>
+            ) 
+        }
+
+        let p = {name: '老刘', age: 18, sex: '男'}
+        ReactDOM.render(<Person {...p}/>, document.getElementById('test'))
+    </script>
+</body>
+</html>
