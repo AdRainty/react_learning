@@ -764,3 +764,256 @@ ReactDOM.render(<Demo/>, document.getElementById("test"))
 </script>
 ~~~
 
+## 3.5 高阶函数和函数的柯里化
+
+**高阶函数**：如果一个函数符合下面两个规范中的任何一个，那该函数就是高阶函数
+
+- 若A函数，接收的参数是一个函数，那么A就可以称为高阶函数
+- 若A函数，调用的返回值依然是一个函数，那么A就可以称为高阶函数
+
+**函数的柯里化**：通过函数调用继续返回函数的形式，实现多次接收参数最后统一处理的函数编码形式
+
+如下面例子：saveFormData就是一个高阶函数
+
+~~~react
+<script type="text/babel">
+    class Login extends React.Component {
+
+        state = {
+            username: '',
+            password: ''
+        }
+
+        handleSubmit = (event) => {
+            event.preventDefault()
+            const {username , password} = this.state
+            alert(`你输入的用户名是： ${username}, 密码是：${password}`)
+        }
+
+        saveFormData = (dataType) => {
+            console.log(dataType)
+            return (event) => {
+                this.setState({[dataType]: event.target.value})
+                console.log(event.target.value)
+            }
+        }
+
+        render() {
+            return (
+                <form action="" onSubmit={this.handleSubmit}>
+                    用户名: <input onChange={this.saveFormData('username')} type="text" name="username"/>    
+                    密码: <input onChange={this.saveFormData('password')} type="password" password="password"/>  
+                    <button>登录</button>  
+                </form>
+            )
+        }
+    }
+
+    ReactDOM.render(<Login/>, document.getElementById("test"))
+</script>
+~~~
+
+另外一种写法：
+
+~~~react
+saveFormData = (dataType, event) => {
+    this.setState({[dataType]: event.target.value})
+}
+
+render() {
+    return (
+        <form action="" onSubmit={this.handleSubmit}>
+            用户名: <input onChange={(event) => {this.saveFormData('username', event)}} type="text" name="username"/>    
+            密码: <input onChange={(event) => {this.saveFormData('password', event)}} type="password" password="password"/>  
+            <button>登录</button>  
+        </form>
+    )
+}
+~~~
+
+## 3.6 React的生命周期
+
+### 3.6.1 Demo例子
+
+先看一个示例，该示例让指定的文本做显示 / 隐藏的渐变动画，点击“不活了”按钮从界面中卸载组件
+
+~~~react
+<script type="text/babel">
+    class Life extends React.Component {
+
+        death = () => {
+            // 取消挂载
+            ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+        }
+
+        state = {
+            opacity: 1
+        }
+
+        // 组件挂载页面之后调用
+        componentDidMount() {
+            this.timmer = setInterval(() => {
+                this.setState({opacity: this.state.opacity - 0.1})
+                if (this.state.opacity < 0) this.setState({opacity: 1})
+            }, 200);
+        }
+
+        // 组件卸载之前
+        componentWillUnmount() {
+            clearInterval(this.timmer)
+        }
+
+        // 初始化渲染、状态更新之后调用
+        render() {
+            return (
+                <div>
+                    <h2 style={{opacity: this.state.opacity}}>React学不会怎么办？</h2>
+                    <button onClick={this.death}>不活了</button>    
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<Life/>, document.getElementById("test"))
+</script>
+~~~
+
+### 3.6.2 生命周期（16.8）
+
+- 组件从创建到死亡它会经历一些特定的阶段。
+- React组件中包含一系列勾子函数(生命周期回调函数), 会在特定的时刻调用。
+- 我们在定义组件时，会在特定的生命周期回调函数中，做特定的工作。
+
+~~~react
+<script type="text/babel">
+    class Count extends React.Component {
+
+        // 构造器
+        constructor(props) {
+            console.log('count_constructor')
+            super(props)
+        }
+
+        state = {
+            count: 0    
+        }
+
+        // 组件将要挂载
+        componentWillMount() {
+            console.log('count_componentWillMount')
+        }
+
+        // 组件挂载页面之后调用
+        componentDidMount() {
+            console.log('count_componentDidMount')
+        }
+
+        // 组件卸载之前
+        componentWillUnmount() {
+            console.log('count_componentWillUnmount')
+        }
+
+        // 渲染
+        render() {
+            console.log('count_render')
+            return (
+                <div>
+                    <h2>当前求和为{this.state.count}</h2>
+                    <button onClick={() => {this.setState({count: this.state.count + 1})}}>点我+1</button>    
+                    <button onClick={() => {ReactDOM.unmountComponentAtNode(document.getElementById('test'))}}>不活了</button> 
+                </div>
+            )   
+        }
+    }
+
+    ReactDOM.render(<Count/>, document.getElementById('test'))
+</script>
+~~~
+
+
+
+![image-20230425222935107](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425222935107.png)
+
+组件初始化：由ReactDOM.render()触发，**初次渲染**
+
+![image-20230425230619339](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425230619339.png)
+
+组件更新：由组件内部this.setSate()或父组件重新render触发
+
+![image-20230425230934411](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425230934411.png)
+
+**卸载组件:** 由ReactDOM.unmountComponentAtNode()触发
+
+![image-20230425231609680](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425231609680.png)
+
+### 3.6.3 生命周期（17.0）
+
+![image-20230425233319922](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425233319922.png)
+
+![image-20230425233405126](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425233405126.png)
+
+**当组件实例被创建并插入 DOM 中时，其生命周期调用顺序如下：**
+
+- constructor()
+- getDerivedStateFromProps()
+
+`static getDerivedStateFromProps(props, state)`：`getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 `null` 则不更新任何内容。
+
+- render()
+- componentDidMount()
+
+**当组件的 props 或 state 发生变化时会触发更新。组件更新的生命周期调用顺序如下：**
+
+- static getDerivedStateFromProps()
+
+`static getDerivedStateFromProps(props, state)`：`getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 `null` 则不更新任何内容。
+
+- shouldComponentUpdate()
+
+- render()
+- getSnapshotBeforeUpdate()
+
+`getSnapshotBeforeUpdate(prevProps, prevState)`：`getSnapshotBeforeUpdate()` 在最近一次渲染输出（提交到 DOM 节点）之前调用。它使得组件能在发生更改之前从 DOM 中捕获一些信息（例如，滚动位置）。此生命周期方法的任何返回值将作为参数传递给 `componentDidUpdate()`。
+
+~~~react
+<script type="text/babel">
+    class NewsList extends React.Component{
+        state = {newsArr: []}
+
+        componentDidMount(){
+            setInterval(() => {
+                let {newsArr} = this.state
+                let news = '新闻' + (newsArr.length + 1)
+                this.setState({newsArr: [news, ...newsArr]})
+            }, 1000)
+        }
+
+        getSnapshotBeforeUpdate() {
+            return this.refs.list.scrollHeight
+        }
+
+        componentDidUpdate(prevProp, preState, height) {
+            this.refs.list.scrollTop += this.refs.list.scrollHeight - height
+        }
+
+        render() {
+            return (
+                <div className="list" ref="list">
+                    {
+                        this.state.newsArr.map((n, index) => {
+                            return <div className="news" key={index}>{n}</div>
+                        })
+                    }
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<NewsList/>, document.getElementById("app"))
+</script>
+~~~
+
+- componentDidUpdate()
+
+**当组件从 DOM 中移除时会调用如下方法：**
+
+- componentWillUnmount()

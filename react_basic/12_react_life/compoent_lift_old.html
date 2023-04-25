@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+    <div id="test">
+
+    </div>
+
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <script type="text/babel">
+        class Count extends React.Component {
+
+            // 构造器
+            constructor(props) {
+                console.log('count_constructor')
+                super(props)
+            }
+
+            state = {
+                count: 0    
+            }
+
+            // 组件将要挂载
+            componentWillMount() {
+                console.log('count_componentWillMount')
+            }
+
+            // 判断是否可以更新
+            shouldComponentUpdate() {
+                console.log('count_shouldComponentUpdate')
+                return true
+            }
+
+            // 组件挂载页面之后调用
+            componentDidMount() {
+                console.log('count_componentDidMount')
+            }
+
+            // 组件卸载之前
+            componentWillUnmount() {
+                console.log('count_componentWillUnmount')
+            }
+
+            componentWillUpdate() {
+                console.log('count_componentWillUpdate')
+            }
+
+            // 渲染
+            render() {
+                console.log('count_render')
+                return (
+                    <div>
+                        <h2>当前求和为{this.state.count}</h2>
+                        <button onClick={() => {this.setState({count: this.state.count + 1})}}>点我+1</button>    
+                        <button onClick={() => {ReactDOM.unmountComponentAtNode(document.getElementById('test'))}}>不活了</button> 
+                    </div>
+                )   
+            }
+        }
+
+        ReactDOM.render(<Count/>, document.getElementById('test'))
+    </script>
+    
+</body>
+</html>
