@@ -1016,4 +1016,162 @@ render() {
 
 **当组件从 DOM 中移除时会调用如下方法：**
 
-- componentWillUnmount()
+- componentWillUnmount() 
+
+## 3.7 diffing算法
+
+diffing算法是用于两个虚拟dom的比较，最小单位是标签
+
+![image-20230427095735761](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304270957457.png)
+
+> react/vue中的key有什么作用？
+>
+> 状态中的数据发生变化时，react会根据【新数据】生成【新的虚拟DOM】，随后React进行【新虚拟DOM】与【旧虚拟DOM】的diff比较，比较规则如下：
+>
+> - **旧虚拟DOM中找到了与新虚拟DOM相同的key：**
+>   - 若虚拟DOM中内容没变, 直接使用之前的真实DOM
+>   - 若虚拟DOM中内容变了, 则生成新的真实DOM，随后替换掉页面中之前的真实DOM
+> - 旧虚拟DOM中未找到与新虚拟DOM相同的key：根据数据创建新的真实DOM，随后渲染到到页面
+>
+> 用index作为key可能会引发的问题：
+>
+> - 若对数据进行：逆序添加、逆序删除等破坏顺序操作:会产生没有必要的真实DOM更新
+> - 如果结构中还包含输入类的DOM：会产生错误DOM更新
+
+# 4 React应用
+
+## 4.1 使用create-react-app创建react应用
+
+### 4.1.1 React脚手架
+
+react提供了一个用于创建react项目的脚手架库: `create-react-app`, 项目的整体技术架构为: react + webpack + es6 + eslint
+
+使用脚手架开发的项目的特点: 模块化, 组件化, 工程化
+
+### 4.1.2 创建项目并启动
+
+全局安装：
+
+~~~bash
+npm i -g create-react-app
+~~~
+
+切换到想创项目的目录，使用命令：
+
+~~~bash
+create-react-app hello-react
+~~~
+
+进入项目文件夹，启动项目：
+
+~~~bash
+npm start
+~~~
+
+![image-20230427110347549](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304271103277.png)
+
+### 4.1.3 React脚手架目录结构
+
+![image-20230427110730035](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304271107615.png)
+
+ public：静态资源文件夹
+
+- favicon.icon：网站页签图标
+- **index.html：主页面**
+- logo192.png：logo图
+- logo512.png：logo图
+- manifest.json：应用加壳的配置文件
+- robots.txt：--- 爬虫协议文件
+
+src ：源码文件夹
+
+- App.css：App组件的样式
+- **App.js：App**组件
+- App.test.js：用于给App做测试
+- index.css ： 样式
+- **index.js ：**入口文件
+- logo.svg ：logo图
+- reportWebVitals.js：页面性能分析文件(需要web-vitals库的支持)
+- setupTests.js：组件单元测试的文件(需要jest-dom库的支持
+
+### 4.1.4 编写代码
+
+![image-20230427143659631](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304271437336.png)
+
+App.js
+
+~~~react
+import './App.css';
+import Hello from './components/Hello'
+import React, {Component} from 'react'
+import Welcome from './components/Welcome';
+
+export default class App extends Component {
+  render() {
+    return (
+      <div>
+        <Hello/>
+        <Welcome/>
+      </div>
+    )
+  }
+}
+~~~
+
+Hello.js
+
+~~~react
+import React, {Component} from 'react'
+import './index.css'
+
+export default class Hello extends Component {
+  render() {
+    return (
+      <h2 className="title">
+        Hello, React!
+      </h2>
+    )
+  }
+}
+~~~
+
+Welcome.js
+
+~~~react
+import React, {Component} from 'react'
+import './index.css'
+
+export default class Welcome extends Component {
+  render() {
+    return (
+      <h2 className="title2">
+        Welcome!
+      </h2>
+    )
+  }
+}
+~~~
+
+### 4.1.5 样式的模块化
+
+在Hello.js中,我们的className为title,而在Welcome.js中,我们的className为title2,这样组件的样式不会重叠,但如果两个组件的className都为title,那么后引入的模块的样式会覆盖之前的样式.
+
+我们可以采用如下的方式避免这个问题:
+
+~~~react
+import React, {Component} from 'react'
+import hello from './index.module.css'
+
+export default class Hello extends Component {
+  render() {
+    return (
+      <h2 className={hello.title}>
+        Hello, React!
+      </h2>
+    )
+  }
+}
+~~~
+
+
+
