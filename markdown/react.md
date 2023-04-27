@@ -2,7 +2,7 @@
 
 ## 1.1 什么是React
 
-![image-20230423142517146](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304231436422.png)
+![image-20230423142517146](https://image.adrainty.xyz/images/202304231436422.png)
 
 React是一个用于构建用户界面（将数据渲染为HTML视图）的JavaScript库
 
@@ -179,7 +179,7 @@ let TDOM = document.getElementById('test');
 console.log("真实DOM: ", TDOM);
 ~~~
 
-![image-20230423212055434](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230423212055434.png)
+![image-20230423212055434](https://image.adrainty.xyz/images/image-20230423212055434.png)
 
 可以发现
 
@@ -259,7 +259,7 @@ let VDOM = (
 
 例如下面一个页面
 
-![image-20230423221219406](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230423221219406.png)
+![image-20230423221219406](https://image.adrainty.xyz/images/image-20230423221219406.png)
 
 在原先写在同一个html里面，用不同的div分割，现在可以使用组件，拆分成不同的组件，可以达到复用编码, 简化项目编码, 提高运行效率的效果
 
@@ -269,7 +269,7 @@ let VDOM = (
 
 以Firefox为例
 
-![image-20230423221745479](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230423221745479.png)
+![image-20230423221745479](https://image.adrainty.xyz/images/image-20230423221745479.png)
 
 ## 3.2 组件的基本使用
 
@@ -325,7 +325,7 @@ class Demo extends React.Component {
 
 输出如下：
 
-![image-20230424001400771](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230424001400771.png)
+![image-20230424001400771](https://image.adrainty.xyz/images/image-20230424001400771.png)
 
 其中`props`、`refs`、`state`就是组件实例的三大核心属性
 
@@ -626,7 +626,7 @@ ReactDOM.render(<Person {...p}/>, document.getElementById('test'))
 
 如果回调Ref函数是以内联函数 的方式定义的，在更新过程中它会被执行两次，第一次传入参数null，第二次传入参数DOM元素。这是因为每次渲染时会创建一个新的函数实例，所以react会清空旧的并设置新的。
 
-![image-20230424232743678](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230424232743678.png)
+![image-20230424232743678](https://image.adrainty.xyz/images/image-20230424232743678.png)
 
 #### 3.3.3.3 createRef
 
@@ -932,25 +932,25 @@ render() {
 
 
 
-![image-20230425222935107](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425222935107.png)
+![image-20230425222935107](https://image.adrainty.xyz/images/image-20230425222935107.png)
 
 组件初始化：由ReactDOM.render()触发，**初次渲染**
 
-![image-20230425230619339](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425230619339.png)
+![image-20230425230619339](https://image.adrainty.xyz/images/image-20230425230619339.png)
 
 组件更新：由组件内部this.setSate()或父组件重新render触发
 
-![image-20230425230934411](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425230934411.png)
+![image-20230425230934411](https://image.adrainty.xyz/images/image-20230425230934411.png)
 
 **卸载组件:** 由ReactDOM.unmountComponentAtNode()触发
 
-![image-20230425231609680](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425231609680.png)
+![image-20230425231609680](https://image.adrainty.xyz/images/image-20230425231609680.png)
 
 ### 3.6.3 生命周期（17.0）
 
-![image-20230425233319922](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425233319922.png)
+![image-20230425233319922](https://image.adrainty.xyz/images/image-20230425233319922.png)
 
-![image-20230425233405126](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230425233405126.png)
+![image-20230425233405126](https://image.adrainty.xyz/images/image-20230425233405126.png)
 
 **当组件实例被创建并插入 DOM 中时，其生命周期调用顺序如下：**
 
@@ -1022,7 +1022,7 @@ render() {
 
 diffing算法是用于两个虚拟dom的比较，最小单位是标签
 
-![image-20230427095735761](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304270957457.png)
+![image-20230427095735761](https://image.adrainty.xyz/images/202304270957457.png)
 
 > react/vue中的key有什么作用？
 >
@@ -1068,11 +1068,11 @@ create-react-app hello-react
 npm start
 ~~~
 
-![image-20230427110347549](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304271103277.png)
+![image-20230427110347549](https://image.adrainty.xyz/images/202304271103277.png)
 
 ### 4.1.3 React脚手架目录结构
 
-![image-20230427110730035](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304271107615.png)
+![image-20230427110730035](https://image.adrainty.xyz/images/202304271107615.png)
 
  public：静态资源文件夹
 
@@ -1096,7 +1096,7 @@ src ：源码文件夹
 
 ### 4.1.4 编写代码
 
-![image-20230427143659631](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/202304271437336.png)
+![image-20230427143659631](https://image.adrainty.xyz/images/202304271437336.png)
 
 App.js
 
@@ -1270,7 +1270,7 @@ export default class App extends Component {
 
 测试
 
-![image-20230427222120342](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230427222120342.png)
+![image-20230427222120342](https://image.adrainty.xyz/images/image-20230427222120342.png)
 
 显示跨域，怎么解决这个问题呢？**配置代理**
 
