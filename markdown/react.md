@@ -1173,5 +1173,149 @@ export default class Hello extends Component {
 }
 ~~~
 
+## 4.2 父子组件传值
 
+父：
+
+~~~react
+addTodo = (data) => {
+    console.log("App", data)
+} 
+
+render() {
+    let {todos} = this.state
+    return (
+        <div className="todo-container">
+            <div className="todo-wrap">
+                <Header a={this.addTodo}/>
+                <List todos={todos}/>
+                <Footer/>
+            </div>
+        </div>
+    )
+}
+~~~
+
+子：
+
+~~~react
+export default class Header extends Component {
+
+    handleKeyUp = (event) => {
+        let {keyCode, target} = event
+        if (keyCode !== 13) return
+        console.log(target.value)
+        this.props.a(target.value)
+    }
+
+    render() {
+        return (
+            <div className="todo-header">
+                <input onKeyUp={this.handleKeyUp} type="text" placeholder="请输入你的任务名称，按回车键确认" />
+            </div>
+        )
+    }
+}
+~~~
+
+# 5 React ajax
+
+## 5.1 介绍
+
+- React本身只关注于界面, 并不包含发送ajax请求的代码
+- 前端应用需要通过ajax请求与后台进行交互(json数据)
+- react应用中需要集成第三方ajax库(或自己封装)
+
+**常用的ajax请求库**
+
+- jQuery: 比较重, 如果需要另外引入不建议使用
+- axios: 轻量级, 建议使用
+  - 封装XmlHttpRequest对象的ajax
+  - promise风格
+  - 可以用在浏览器端和node服务器端
+
+## 5.2 使用axios
+
+安装axios
+
+```bash
+yarn add axios
+```
+
+使用
+
+```react
+import './App.css';
+import axios from 'axios'
+import React, { Component } from 'react'
+
+export default class App extends Component {
+
+  getStudentData = () => {
+    axios.get("http://localhost:5000/students").then(
+      response => {console.log('Success', response.data)},
+      error => {console.log('Error', error)}
+    )
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.getStudentData}>点我获取学生数据</button>
+      </div>
+    )
+  }
+}
+```
+
+测试
+
+![image-20230427222120342](https://picgo-1301677055.cos.ap-shanghai.myqcloud.com/images/image-20230427222120342.png)
+
+显示跨域，怎么解决这个问题呢？**配置代理**
+
+> 跨域实际上请求是可以发的，只是数据回不来而已
+
+## 5.3 React脚手架配置代理
+
+### 5.3.1 修改package.json
+
+~~~json
+"proxy": "http://localhost:5000"
+~~~
+
+注意，这种方法在react 18之后并不适用，工作台一般会运行不了 报这个错误
+
+```bash
+yarn run v1.22.19
+$ react-scripts start
+Invalid options object. Dev Server has been initialized using an options object that does not match the API schema.
+ - options.allowedHosts[0] should be a non-empty string.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+### 5.3.2 编辑setupProxy.js
+
+~~~js
+const { createProxyMiddleware } = require('http-proxy-middleware')
+
+module.exports = function (app) {
+    app.use(
+        createProxyMiddleware('/api1', {
+            target: 'http://localhost:5000',
+            changeOrigin: true,
+            pathRewrite: { '^/api1': '' }
+        }),
+
+        createProxyMiddleware('/api2', {
+            target: 'http://localhost:5001',
+            changeOrigin: true,
+            pathRewrite: { '^/api2': '' }
+        })
+    )
+}
+~~~
+
+## 5.4 消息订阅-发布机制
 
