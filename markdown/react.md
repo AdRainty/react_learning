@@ -1319,3 +1319,67 @@ module.exports = function (app) {
 
 ## 5.4 消息订阅-发布机制
 
+下载：
+
+~~~bash
+npm install pubsub-js --save
+~~~
+
+使用：
+
+消息发布：
+
+~~~state
+PubSub.publish('update_data', {isLoading: false, users: response.data.items})
+~~~
+
+消息订阅：
+
+~~~react
+componentDidMount() {
+    this.token = PubSub.subscribe('update_data', (_, stateObj) => {
+        console.log("receive data: ", stateObj)
+        this.setState(stateObj)
+    })
+}
+
+componentWillUnmount() {
+    PubSub.unsubscribe(this.token)
+}
+~~~
+
+# 6 React路由
+
+## 6.1 基础概念
+
+### 6.1.1 SPA
+
+1. 单页Web应用（single page web application，SPA）。
+2.  整个应用只有**一个完整的页面**。
+3. 点击页面中的链接**不会刷新**页面，只会做页面的**局部更新。**
+4. 数据都需要通过ajax请求获取, 并在前端异步展现。
+
+### 6.1.2 路由
+
+**什么是路由?**
+
+- 一个路由就是一个映射关系(key:value)
+- key为路径, value可能是function或component
+
+**路由分类**
+
+- 后端路由：
+
+理解： value是function, 用来处理客户端提交的请求。
+
+ 注册路由： router.get(path, function(req, res))
+
+工作过程：当node接收到一个请求时, 根据请求路径找到匹配的路由, 调用路由中的函数来处理请求, 返回响应数据
+
+- 前端路由：
+
+浏览器端路由，value是component，用于展示页面内容。
+
+注册路由: `<Route path="/test" component={Test}>`
+
+工作过程：当浏览器的path变为/test时, 当前路由组件就会变为Test组件
